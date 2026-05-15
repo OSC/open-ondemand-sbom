@@ -1,0 +1,17 @@
+FROM debian:12
+LABEL maintainer="travert@osc.edu"
+LABEL ood.version="4.2.2"
+LABEL ood.distro="bookworm"
+LABEL ood.scan="staging"
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y apt-transport-https ca-certificates wget && \
+    wget -O /tmp/ondemand-release.deb https://yum.osc.edu/ondemand/staging/4.2/ondemand-release-web_4.2.0-bookworm_all.deb && \
+    apt-get install -y /tmp/ondemand-release.deb && \
+    sed -i 's|ondemand/4\.2/|ondemand/staging/4.2/|g' /etc/apt/sources.list.d/ondemand*.list && \
+    apt-get update && \
+    apt-get install -y ondemand && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/ondemand-release.deb

@@ -1,0 +1,15 @@
+FROM rockylinux/rockylinux:8
+LABEL maintainer="travert@osc.edu"
+LABEL ood.version="4.2.2"
+LABEL ood.distro="el8"
+LABEL ood.scan="staging"
+
+# Rocky 8: needs powertools + dnf-plugins-core for config-manager
+RUN dnf -y install dnf-plugins-core epel-release && \
+    dnf config-manager --set-enabled powertools && \
+    dnf -y install https://yum.osc.edu/ondemand/staging/4.2/ondemand-release-web-4.2-1.el8.noarch.rpm && \
+    sed -i 's|ondemand/4\.2/|ondemand/staging/4.2/|g' /etc/yum.repos.d/ondemand-web.repo && \
+    dnf module enable -y ruby:3.3 nodejs:22 && \
+    dnf -y install ondemand && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf/*

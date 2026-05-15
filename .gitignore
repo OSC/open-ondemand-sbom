@@ -1,0 +1,14 @@
+# scratch/build artifacts
+*.tar
+*.tar.gz
+/tmp/
+
+# cosign material — never commit private keys
+cosign.key
+*.key
+
+# editor noise
+.DS_Store
+.vscode/
+.idea/
+*.swp

@@ -1,0 +1,13 @@
+FROM rockylinux/rockylinux:9
+LABEL maintainer="travert@osc.edu"
+LABEL ood.version="4.2.2"
+LABEL ood.distro="el9"
+LABEL ood.scan="staging"
+
+RUN dnf -y install https://yum.osc.edu/ondemand/staging/4.2/ondemand-release-web-4.2-1.el9.noarch.rpm && \
+    sed -i 's|ondemand/4\.2/|ondemand/staging/4.2/|g' /etc/yum.repos.d/ondemand-web.repo && \
+    dnf -y install epel-release && \
+    dnf module enable -y ruby:3.3 nodejs:22 && \
+    dnf -y install ondemand && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf/*
