@@ -3,7 +3,7 @@
 CycloneDX Software Bill of Materials for [Open OnDemand](https://openondemand.org) releases.
 
 ## Layout
-<major.minor>/<distro>/<arch>/ood-<version>-<distro>-<arch>.cdx.json
+`<major.minor>/<distro>/<arch>/ood-<version>-<distro>-<arch>.cdx.json`
 
 ## Coverage
 
