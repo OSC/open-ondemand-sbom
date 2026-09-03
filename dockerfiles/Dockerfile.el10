@@ -1,14 +1,19 @@
 FROM rockylinux/rockylinux:10
+
+ARG OOD_VERSION
+ARG OOD_MAJOR_MINOR
+
 LABEL maintainer="travert@osc.edu"
-LABEL ood.version="4.2.2"
+LABEL ood.version="${OOD_VERSION}"
 LABEL ood.distro="el10"
 LABEL ood.scan="staging"
 
 # Rocky 10: CRB replaces PowerTools; no dnf modules (ondemand-ruby/nodejs pull deps directly)
-RUN dnf -y install dnf-plugins-core epel-release && \
+RUN OOD_MM_RE="$(printf '%s' "$OOD_MAJOR_MINOR" | sed 's/\./\\./g')" && \
+    dnf -y install dnf-plugins-core epel-release && \
     dnf config-manager --set-enabled crb && \
-    dnf -y install https://yum.osc.edu/ondemand/staging/4.2/ondemand-release-web-4.2-1.el10.noarch.rpm && \
-    sed -i 's|ondemand/4\.2/|ondemand/staging/4.2/|g' /etc/yum.repos.d/ondemand-web.repo && \
-    dnf -y install ondemand && \
+    dnf -y install "https://yum.osc.edu/ondemand/staging/${OOD_MAJOR_MINOR}/ondemand-release-web-${OOD_MAJOR_MINOR}-1.el10.noarch.rpm" && \
+    sed -i "s|ondemand/${OOD_MM_RE}/|ondemand/staging/${OOD_MM_RE}/|g" /etc/yum.repos.d/ondemand-web.repo && \
+    dnf -y install "ondemand-${OOD_VERSION}" && \
     dnf clean all && \
     rm -rf /var/cache/dnf/*
