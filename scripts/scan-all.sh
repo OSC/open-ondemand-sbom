@@ -35,7 +35,7 @@ OOD_VERSION="$1"
 DISTRO_FILTER="${2:-}"
 
 if ! [[ "$OOD_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  echo "ERROR: '$OOD_VERSION' doesn't look like a semver OOD version (expected e.g. 4.2.3)" >&2
+  echo "ERROR: '$OOD_VERSION' doesn't look like a semantic OOD version (expected e.g. 4.2.3)" >&2
   exit 1
 fi
 
