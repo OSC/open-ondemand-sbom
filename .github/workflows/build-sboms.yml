@@ -111,6 +111,11 @@ jobs:
       - name: Open PR
         uses: peter-evans/create-pull-request@v6
         with:
+          # Required: this workflow is only ever triggered by a tag push,
+          # which leaves the checkout in a detached-HEAD state (same as
+          # `release` events). Without an explicit base, the action can't
+          # figure out what branch to open the PR against.
+          base: main
           commit-message: "sboms: add ${{ steps.version.outputs.version }} (x86_64 + aarch64, all distros)"
           branch: "sbom/${{ steps.version.outputs.version }}"
           title: "SBOMs for OOD ${{ steps.version.outputs.version }}"
