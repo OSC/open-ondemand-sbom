@@ -30,7 +30,7 @@ if [ ! -d "$SBOM_ROOT" ]; then
 fi
 
 cd "$SBOM_ROOT"
-find . -name 'ood-*.cdx.json' -print0 | xargs -0 sha256sum > checksums.txt
+find . -name 'ood-*.cdx.json' -print0 | sort -z | xargs -0 sha256sum > checksums.txt
 echo "Wrote $SBOM_ROOT/checksums.txt ($(wc -l < checksums.txt) entries)"
 
 if [ "$USE_COSIGN" = "1" ]; then

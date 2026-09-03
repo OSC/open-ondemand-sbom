@@ -66,6 +66,8 @@ if ! command -v syft &>/dev/null; then
   exit 1
 fi
 
+FAILURES=0
+
 for DISTRO in "${DISTROS[@]}"; do
   IMAGE_TAG="ood-sbom-scan:${OOD_VERSION}-${DISTRO}-${ARCH}"
   DOCKERFILE="$DOCKERFILE_DIR/Dockerfile.${DISTRO}"
@@ -74,6 +76,7 @@ for DISTRO in "${DISTROS[@]}"; do
 
   if [ ! -f "$DOCKERFILE" ]; then
     echo "WARNING: No Dockerfile for $DISTRO at $DOCKERFILE — skipping"
+    FAILURES=$((FAILURES + 1))
     continue
   fi
 
@@ -90,6 +93,7 @@ for DISTRO in "${DISTROS[@]}"; do
       --build-arg "OOD_MAJOR_MINOR=${MAJOR_MINOR}" \
       -t "$IMAGE_TAG" -f "$DOCKERFILE" "$DOCKERFILE_DIR"; then
     echo "ERROR: Docker build failed for $DISTRO — skipping scan"
+    FAILURES=$((FAILURES + 1))
     continue
   fi
 
@@ -106,6 +110,11 @@ for DISTRO in "${DISTROS[@]}"; do
   echo "✅ $SBOM"
 done
 
+if [ "$FAILURES" -gt 0 ]; then
+  echo ""
+  echo "ERROR: $FAILURES distro(s) failed to build/scan — see above. Not a clean run." >&2
+fi
+
 # Only rebuild the aggregate manifest on a full (all-distro) run — a
 # single-distro CI leg doesn't have the full picture. CI's publish job
 # calls build-checksums.sh itself once every leg's artifact is collected.
@@ -120,3 +129,7 @@ fi
 echo ""
 echo "All done. Output tree under $SBOM_ROOT:"
 find "$SBOM_ROOT" -type f | sort
+
+if [ "$FAILURES" -gt 0 ]; then
+  exit 1
+fi
