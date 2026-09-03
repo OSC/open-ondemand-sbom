@@ -96,7 +96,12 @@ jobs:
 
       - name: Merge into the repo tree
         run: |
-          cp -a _artifacts/. .
+          # upload-artifact strips everything before the first wildcard in
+          # the upload path (4.2/**/* -> artifacts rooted at <distro>/<arch>/),
+          # so the major.minor prefix has to be put back here.
+          MM="${{ steps.version.outputs.major_minor }}"
+          mkdir -p "$MM"
+          cp -a _artifacts/. "$MM/"
           rm -rf _artifacts
 
       - name: Install cosign
