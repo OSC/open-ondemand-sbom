@@ -34,7 +34,7 @@ jobs:
         # IBM-managed-runner path being explored separately.
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Derive OOD version from tag
         id: version
@@ -51,7 +51,7 @@ jobs:
         run: ./scripts/install-syft.sh
 
       - name: Install cosign
-        uses: sigstore/cosign-installer@v3
+        uses: sigstore/cosign-installer@f713795cb21599bc4e5c4b58cbad1da852d7eeb9 # v3
 
       - name: Build & scan ${{ matrix.distro }}/${{ matrix.arch }}
         env:
@@ -61,7 +61,7 @@ jobs:
         run: ./scripts/scan-all.sh "${{ steps.version.outputs.version }}" "${{ matrix.distro }}"
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: sbom-${{ matrix.distro }}-${{ matrix.arch }}
           path: ${{ steps.version.outputs.major_minor }}/**/*
@@ -83,7 +83,7 @@ jobs:
       id-token: write # required for cosign keyless signing of checksums.txt
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Derive OOD version from tag
         id: version
@@ -93,7 +93,7 @@ jobs:
           echo "major_minor=${VERSION%.*}" >> "$GITHUB_OUTPUT"
 
       - name: Download all SBOM artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           pattern: sbom-*
           path: _artifacts
@@ -113,7 +113,7 @@ jobs:
           rm -rf _artifacts
 
       - name: Install cosign
-        uses: sigstore/cosign-installer@v3
+        uses: sigstore/cosign-installer@f713795cb21599bc4e5c4b58cbad1da852d7eeb9 # v3
 
       - name: Rebuild & sign checksums.txt
         env:
@@ -122,7 +122,7 @@ jobs:
         run: ./scripts/build-checksums.sh "${{ steps.version.outputs.major_minor }}"
 
       - name: Open PR
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
         with:
           # Required: this workflow is only ever triggered by a tag push,
           # which leaves the checkout in a detached-HEAD state (same as

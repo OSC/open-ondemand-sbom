@@ -1,0 +1,26 @@
+# CODEOWNERS
+#
+# This only takes effect once "Require review from Code Owners" is turned on
+# in Settings > Branches > main (branch protection rule). The file alone
+# doesn't enforce anything.
+#
+# Reviewers, by GitHub handle:
+#   @johrstrom       Jeff Ohrstrom
+#   @Bubballoo3      Braeden Singleton
+#   @Oglopf          Travis Ravert
+#   @achalker        Alan Chalker
+#   @moffatsadeghi   Emily Moffat Sadeghi
+#   @treydock        Trey Dockendorf
+#
+# Last matching pattern wins, so the specific paths below are for
+# documentation (calling out what's most sensitive) rather than changing
+# who's required -- the default at the bottom already covers everything.
+
+# Whatever actually builds and signs -- change here changes what gets
+# published as a trusted, signed SBOM under this repo's identity.
+/.github/workflows/ @johrstrom @Bubballoo3 @Oglopf @achalker @moffatsadeghi @treydock
+/scripts/            @johrstrom @Bubballoo3 @Oglopf @achalker @moffatsadeghi @treydock
+/dockerfiles/        @johrstrom @Bubballoo3 @Oglopf @achalker @moffatsadeghi @treydock
+
+# Default: everything else in the repo, same reviewers.
+*                    @johrstrom @Bubballoo3 @Oglopf @achalker @moffatsadeghi @treydock
